@@ -55,10 +55,11 @@ elif [[ -z "$1" ]]; then
             search="$(find . -iname "$type" | wc -l)"
             if [[ "$search" -ne 0 ]]; then 
                 echo attempting to play media now 
-                screen -d -m find . -iname "$type" -exec mpv {} \;  
+                nohup find . -iname "$type" -exec mpv {} > /dev/null
                 echo media now detached in screen session 
             fi
-            wait 
+            wait
+            rm ./*nohup*
             exit 
         fi
     done
@@ -76,9 +77,10 @@ for type in "${formats[@]}"; do
         #if nohup mpv "$match" 1>simple.out 2>simple.err; then 
         echo initiating screen session to play media in background 
         sleep 1s & 
-        if screen -d -m find "$PWD" -maxdepth 1 -type f -iname "$type" -iname "*$1*" -exec mpv {} + | tee 1&>/dev/null \;; then 
+if nohup find "$PWD" -maxdepth 1 -type f -iname "$type" -iname "*$1*" -exec mpv {} \;; then
             wait 
         fi
+        rm ./*nohup*
         exit 0 
     fi
 done
