@@ -55,8 +55,7 @@ elif [[ -z "$1" ]]; then
             search="$(find . -iname "$type" | wc -l)"
             if [[ "$search" -ne 0 ]]; then 
                 echo attempting to play media now 
-                nohup find . -iname "$type" -exec mpv {} > /dev/null
-                echo media now detached in screen session 
+                nohup find . -iname "$type" -exec mpv {} \;
             fi
             wait
             rm ./*nohup*
@@ -74,8 +73,6 @@ for type in "${formats[@]}"; do
         echo "got a match"
         echo "Playing file now. This may take a moment..." 
         #echo -e "Close this window at any time - the media will continue playing\nHowever, entering \"ctrl+c\" terminates the media player"
-        #if nohup mpv "$match" 1>simple.out 2>simple.err; then 
-        echo initiating screen session to play media in background 
         sleep 1s & 
 if nohup find "$PWD" -maxdepth 1 -type f -iname "$type" -iname "*$1*" -exec mpv {} \;; then
             wait 
