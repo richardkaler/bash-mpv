@@ -10,7 +10,7 @@ if [[ "$1" == "-d" ]]; then
     exit 0 #... production. These also are not scripts you should be using at work because, well... If you can use them for work, that's cool too.  
 fi
 
-rootaccess="$(sudo -v)" 
+rootaccess() { sudo -v; }
 
 if ! which mpv >/dev/null; then 
     echo "mpv is not installed - attempting install now" &&
