@@ -10,11 +10,11 @@ if [[ "$1" == "-d" ]]; then
     exit 0 #... production. These also are not scripts you should be using at work because, well... If you can use them for work, that's cool too.  
 fi
 
-rootaccess() { sudo -v; }
+rootaccess() { sudo -v > /dev/null 2>&1; }
 
 if ! which mpv >/dev/null; then 
     echo "mpv is not installed - attempting install now" &&
-        if [[ -n "$rootaccess" ]]; then 
+        if rootaccess; then 
             sudo apt-get install mpv -y #this is an important step and it saves the user a lot of time as many wanting to use this may not already have mpv on their system 
         else 
             echo "log in as a user with root access to install mpv" 
