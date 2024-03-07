@@ -6,8 +6,8 @@
 # Notify user that searching for files to play
 
 if [[ "$1" == "-d" ]]; then 
-    source playdir #see sister script. Adding even more soon. 
-    exit 0 
+    source playdir.sh #see sister script. Adding even more soon.... Please make sure to put both of these in path. Check names used in these files - both the names of the scripts, and the references to them within. These were tested a few times but not for  
+    exit 0 #... production. These also are not scripts you should be using at work because, well... If you can use them for work, that's cool too.  
 fi
 
 rootaccess="$(sudo -v)" 
@@ -36,7 +36,7 @@ formats=(
 
 summary() {
     echo "Plays files in the current directory" 
-    echo "Ex: play [file]"
+    echo "Ex: play.sh [file]"
     echo "NOTE: You may be asking for trouble if multiple files match your string"
     echo "File must have a valid extension: mpv, avi, mp4, wmv, flac, mov"
 }
