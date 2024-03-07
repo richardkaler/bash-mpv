@@ -5,22 +5,26 @@
 
 # Notify user that searching for files to play
 
+
+# Notify user that searching for files to play
+
 if [[ "$1" == "-d" ]]; then 
-    source playdir.sh #see sister script. Adding even more soon.... Please make sure to put both of these in path. Check names used in these files - both the names of the scripts, and the references to them within. These were tested a few times but not for  
-    exit 0 #... production. These also are not scripts you should be using at work because, well... If you can use them for work, that's cool too.  
+    source playdir.sh 
+    exit 0 
 fi
 
 rootaccess() { sudo -v > /dev/null 2>&1; }
 
+
 if ! which mpv >/dev/null; then 
     echo "mpv is not installed - attempting install now" 
-        if rootaccess; then 
-            sudo apt-get install mpv -y #this is an important step and it saves the user a lot of time as many wanting to use this may not already have mpv on their system 
-        else 
-            echo "log in as a user with root access to install mpv" 
-            echo "NOTE: $(whoami) does not have required root permissions" 
-            exit 1 
-        fi
+    if rootaccess; then 
+        sudo apt-get install mpv -y 
+    else 
+        echo "log in as a user with root access to install mpv" 
+        echo "NOTE: $(whoami) does not have required root permissions" 
+        exit 1 
+    fi
 else 
     echo "mpv is already installed - proceeding with script" 
 fi
@@ -49,16 +53,15 @@ if [[ "$1" == "-h" ]]; then
 elif [[ -z "$1" ]]; then 
     for type in "${formats[@]}"
     do
-        quant="$(find . -maxdepth 1 -type f -iname "$type" | wc -l)"
-        quant2="$(find . -maxdepth 1 -type l -iname "$type" | wc -l)"
+        quant="$(find . -maxdepth 1 -type f -iname "$type" | wc -l)" #Prevents the opening of several simultaneous files which would jam  up a host  
+        quant2="$(find . -maxdepth 1 -type l -iname "$type" | wc -l)" #Does the same thing but checks for symbolic links instead of just files 
         if [[ "$quant" -eq 1 ]] || [[ "$quant2" -eq 1 ]]; then  
             search="$(find . -iname "$type" | wc -l)"
             if [[ "$search" -ne 0 ]]; then 
                 echo attempting to play media now 
-                nohup find . -iname "$type" -exec mpv {} \;
+                screen -S mpvplay -dm find . -iname "$type" -exec mpv {} + & 
+                echo media now detached in screen session 
             fi
-            wait
-            rm ./*nohup*
             exit 
         fi
     done
@@ -72,12 +75,11 @@ for type in "${formats[@]}"; do
     if [[ -n "$match" ]]; then
         echo "got a match"
         echo "Playing file now. This may take a moment..." 
-        #echo -e "Close this window at any time - the media will continue playing\nHowever, entering \"ctrl+c\" terminates the media player"
+        echo initiating screen session to play media in background 
         sleep 1s & 
-if nohup find "$PWD" -maxdepth 1 -type f -iname "$type" -iname "*$1*" -exec mpv {} \;; then
+        if screen -S "$1" -dm find "$PWD" -maxdepth 1 -type f -iname "$type" -iname "*$1*" -exec mpv {} +; then 
             wait 
         fi
-        rm ./*nohup*
         exit 0 
     fi
 done
