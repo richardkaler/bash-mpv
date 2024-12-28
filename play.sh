@@ -41,7 +41,7 @@ else
     echo "mpv is already installed - proceeding with script"
 fi
 
-search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.avi|\.mp4|\.mkv|\.flac|\.wmv|\.mov'; }
+search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.(avi|\.mp4|\.mkv|\.flac|\.wmv|\.mov)$'; }
 
 filecount="$(search | wc -l)"
 
@@ -59,8 +59,8 @@ screenplay() { screen -S mpvplay -dm find "$PWD" -maxdepth 1 -iname "*$searchter
 echo "Opening file with mpv now..."
 
 if screenplay; then
-    sleep .4s
-    wait
+    #sleep .4s
+    #wait
     exit 0
 else
     echo "Error - failed to launch media"
