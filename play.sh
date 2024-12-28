@@ -1,8 +1,8 @@
 #!/bin/bash
 
-
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
+
 
 shortname="$(basename "$0")"
 
@@ -42,7 +42,9 @@ else
     echo "mpv is already installed - proceeding with script"
 fi
 
-search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.(avi|\.mp4|\.mkv|\.flac|\.wmv|\.mov)$'; }
+#search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.(avi|\.mp4|\.mkv|\.flac|\.wmv|\.mov)$'; }
+
+search() { find "$PWD" -type f -iname "*$searchterm*" |  grep -iE '(avi|mp4|mkv|flac|wmv|mov)$'; }
 
 filecount="$(search | wc -l)"
 
@@ -52,12 +54,13 @@ if [[ "$filecount" -gt 1 ]]; then
     exit 0
 fi
 
-finalcheck="$(find "$PWD" -type f -iname "*$searchterm*" |  grep -iE '(avi|mp4|mkv|flac|wmv|mov)$' )"
 
-if [[ -z "$finalcheck" ]]; then
+
+if [[ -z "$(search)" ]]; then
     echo "Invalid file extension"
     exit 1
 fi
+
 
 screenplay() { screen -S mpvplay -dm find "$PWD" -maxdepth 1 -iname "*$searchterm*" -exec mpv {} +; }
 
