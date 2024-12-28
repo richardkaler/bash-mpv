@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -e
 
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
@@ -15,7 +15,7 @@ summary() {
     echo "Plays files in the current directory"
     echo "Ex: play.sh [file]"
     echo "Tip: script plays one file at a time - limit your search"
-    echo "File must have a valid extension: mpv, avi, mp4, wmv, flac, mov"
+    echo "File must have a valid extension: mkv, avi, mp4, wmv, flac, mov"
 }
 
 if [[ "$1" =~ (h|-h|--h|-help|--help|help)$ ]]; then
