@@ -3,7 +3,6 @@
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
 
-
 shortname="$(basename "$0")"
 
 if [[ -z "$arg" ]]; then
@@ -15,7 +14,6 @@ fi
 summary() {
     echo "Plays files in the current directory"
     echo "Ex: play.sh [file]"
-    echo "Tip: script plays one file at a time - limit your search"
     echo "File must have a valid extension: mkv, avi, mp4, wmv, flac, mov"
 }
 
@@ -42,9 +40,7 @@ else
     echo "mpv is already installed - proceeding with script"
 fi
 
-#search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.(avi|\.mp4|\.mkv|\.flac|\.wmv|\.mov)$'; }
-
-search() { find "$PWD" -type f -iname "*$searchterm*" |  grep -iE '(avi|mp4|mkv|flac|wmv|mov)$'; }
+search() { find "$PWD" -type f -iname "*$searchterm*" |  grep -iE '(\.avi|\.mp4|\.mkv|\.flac|\.wmv|\.mov)$'; }
 
 filecount="$(search | wc -l)"
 
@@ -53,7 +49,6 @@ if [[ "$filecount" -gt 1 ]]; then
     echo "Found $filecount file(s). Too many matches. Narrow your search."
     exit 0
 fi
-
 
 
 if [[ -z "$(search)" ]]; then
