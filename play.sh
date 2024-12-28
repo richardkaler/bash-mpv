@@ -1,4 +1,5 @@
-#!/bin/bash -x
+#!/bin/bash
+
 
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
@@ -49,11 +50,14 @@ filecount="$(search | wc -l)"
 if [[ "$filecount" -gt 1 ]]; then
     echo "Found $filecount file(s). Too many matches. Narrow your search."
     exit 0
-elif [[ -z "$filecount" ]]; then
-    echo "got nothing"
-    exit 0
 fi
 
+finalcheck="$(find "$PWD" -type f -iname "*$searchterm*" |  grep -iE '(avi|mp4|mkv|flac|wmv|mov)$' )"
+
+if [[ -z "$finalcheck" ]]; then
+    echo "Invalid file extension"
+    exit 1
+fi
 
 screenplay() { screen -S mpvplay -dm find "$PWD" -maxdepth 1 -iname "*$searchterm*" -exec mpv {} +; }
 
