@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -x
 
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
@@ -45,7 +45,7 @@ search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.
 
 filecount="$(search | wc -l)"
 
-if [[ "$filecount" -eq 0 ]]; then
+if [[ "$filecount" -ne 1 ]]; then
     echo "No valid media found - check file integrity or narrow search"
     exit 0
 fi
