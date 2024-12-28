@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -x
 
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
@@ -45,10 +45,13 @@ search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.
 
 filecount="$(search | wc -l)"
 
-if [[ "$filecount" -ne 1 ]]; then
-  echo "Error: Expected exactly one file to match, but found $filecount."
-  echo "Please narrow your search."
-  exit 0
+
+if [[ "$filecount" -gt 1 ]]; then
+    echo "Found $filecount file(s). Too many matches. Narrow your search."
+    exit 0
+elif [[ -z "$filecount" ]]; then
+    echo "got nothing"
+    exit 0
 fi
 
 
