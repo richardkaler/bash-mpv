@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 arg="$1"
 searchterm="$(echo "$1" | sed 's%\./%%')"
@@ -45,10 +45,7 @@ search() { find "$PWD" -maxdepth 1 -type f -iname "*$searchterm*" | grep -iE '\.
 
 filecount="$(search | wc -l)"
 
-if [[ "$filecount" -gt 1 ]]; then
-    echo "Too many results - try narrowing your search"
-    exit 0
-elif [[ -z "$filecount" ]]; then
+if [[ "$filecount" -eq 0 ]]; then
     echo "No valid media found - check file integrity or narrow search"
     exit 0
 fi
@@ -59,9 +56,7 @@ screenplay() { screen -S mpvplay -dm find "$PWD" -maxdepth 1 -iname "*$searchter
 echo "Opening file with mpv now..."
 
 if screenplay; then
-    #sleep .4s
-    #wait
-    exit 0
+     exit 0
 else
     echo "Error - failed to launch media"
 exit 1
